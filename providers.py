@@ -8,7 +8,7 @@ GITHUB_EVENTS = ['commit_comment', 'create', 'delete', 'deployment',
                  'issues', 'member', 'page_build', 'public',
                  'pull_request_review_comment', 'pull_request', 'push',
                  'release', 'status', 'team_add', 'watch', '*']
-GITLAB_EVENTS = ['push_hook', 'tag_push_hook', 'issue_hook', 'note_hook', 'merge_request_hook']
+GITLAB_EVENTS = ['push_hook', 'tag_push_hook', 'issue_hook', 'note_hook', 'merge_request_hook', 'pipeline_event']
 SUPPORTED_EVENTS = GITHUB_EVENTS + GITLAB_EVENTS
 DEFAULT_EVENTS = ['commit_comment', 'issue_comment', 'issues', 'pull_request_review_comment',
                   'pull_request', 'push', 'push_hook', 'tag_push_hook', 'issue_hook',
@@ -50,7 +50,7 @@ class GithubHandlers(CommonGitWebProvider):
         """
         # TODO: Fix GitLab token validation:
         #       https://docs.gitlab.com/ce/web_hooks/web_hooks.html#secret-token
-        signature = request.get_header('X-Hub-Signature')
+        signature = request.headers['X-Hub-Signature']
 
         if signature is None:
             return False
@@ -155,11 +155,13 @@ class GitLabHandlers(CommonGitWebProvider):
         # TODO: Fix GitLab token validation:
         #       https://docs.gitlab.com/ce/web_hooks/web_hooks.html#secret-token
         """
-        signature = request.get_header('X-Gitlab-Token')
+        signature = request.headers['X-Gitlab-Token']
         return True
 
     def get_repo(self, body):
-        return body['project']['name']
+        # TODO 
+        # return body['project']['name']
+        return body['project']['path_with_namespace']
 
     def map_event_type(self, event_type):
         return {
