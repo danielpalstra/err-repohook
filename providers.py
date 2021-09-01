@@ -8,7 +8,7 @@ GITHUB_EVENTS = ['commit_comment', 'create', 'delete', 'deployment',
                  'issues', 'member', 'page_build', 'public',
                  'pull_request_review_comment', 'pull_request', 'push',
                  'release', 'status', 'team_add', 'watch', '*']
-GITLAB_EVENTS = ['push_hook', 'tag_push_hook', 'issue_hook', 'note_hook', 'merge_request_hook', 'pipeline_event']
+GITLAB_EVENTS = ['push_hook', 'tag_push_hook', 'issue_hook', 'note_hook', 'merge_request_hook', 'pipeline_hook']
 SUPPORTED_EVENTS = GITHUB_EVENTS + GITLAB_EVENTS
 DEFAULT_EVENTS = ['commit_comment', 'issue_comment', 'issues', 'pull_request_review_comment',
                   'pull_request', 'push', 'push_hook', 'tag_push_hook', 'issue_hook',
@@ -168,6 +168,7 @@ class GitLabHandlers(CommonGitWebProvider):
             'push_hook': 'push',
             'issue_hook': 'issue',
             'note_hook': 'comment',
+            'pipeline_hook': 'pipeline',
         }.get(event_type)
 
     def create_message(self, body, event_type, repo):
